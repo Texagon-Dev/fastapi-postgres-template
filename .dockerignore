@@ -12,6 +12,7 @@ Readme.md
 README.md
 letsencrypt/
 postgres-data/
+pgadmin-data/
 *.DS_Store
 *.log
 *.sqlite3
