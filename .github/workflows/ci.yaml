@@ -1,0 +1,54 @@
+name: FastAPI CI with uv
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - staging
+
+jobs:
+  test-and-run:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
+      with:
+        version: "0.8.22"
+
+    - name: Create virtual environment and sync dependencies
+      run: |
+        uv venv .venv
+        uv sync
+
+    - name: Run pre-commit hooks with uv
+      run: uv run pre-commit run --all-files
+
+    - name: Run ruff linter check with uv
+      run: uv run ruff check ./app
+
+    - name: Start FastAPI app with uvicorn in background
+      run: |
+        uv run uvicorn app.main:app --host 127.0.0.1 --port 8001 &
+        sleep 10 # wait for server startup
+
+    - name: Health check API response
+      run: |
+        RESPONSE=$(curl -s http://127.0.0.1:8001/api/health)
+        EXPECTED='{"data":{"status":"ok","message":"API is running"},"is_success":true,"error":null,"meta_data":{"version":"1.0.0","timestamp":"2024-07-24T10:00:00Z"}}'
+        if [ "$RESPONSE" != "$EXPECTED" ]; then
+          echo "Health check response does not match expected"
+          echo "Response: $RESPONSE"
+          exit 1
+        else
+          echo "Health check passed."
+        fi
