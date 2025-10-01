@@ -27,6 +27,11 @@ jobs:
           --health-retries 5
     env:
       DATABASE_URL: postgresql://hbky:my_secure_pass@localhost:5432/ci_db
+      DATABASE_NAME: ci_db
+      DATABASE_USER: hbky
+      DATABASE_PASSWORD: my_secure_pass
+      DATABASE_HOST: localhost
+      DATABASE_PORT: 5432
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
