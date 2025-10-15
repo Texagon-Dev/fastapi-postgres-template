@@ -57,6 +57,45 @@ dev = [
     "ruff>=0.12.9",
 ]
 
+
 [tool.ruff]
+target-version = "py312"
 line-length = 120
-select = ["E", "F", "W", "C", "B"]
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    "app/alembic"
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.lint]
+# Select rule groups or codes appropriate for your project scope
+select = ["E", "F", "A", "ASYNC", "B", "I"]
+# Optionally ignore rules you don't care about
+ignore = []
+# Enable fixing of all fixable problems when running with --fix
+fixable = ["ALL"]
+unfixable = []
+# Regex to allow underscore-prefixed variables as unused without warning
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+warn_return_any = true
