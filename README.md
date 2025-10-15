@@ -31,11 +31,22 @@ This is a template project for a FastAPI application with a PostgreSQL database,
 
 ## Basic Configuration
 
+### Setup
+Setup Automatically
+```python
+./setup.py
+```
+OR Manually
+
 1.  **Environment Variables**:
     This project uses a `.env` file for local development configuration. If it doesn't exist, run this command to create:
 
     ```python
-    cp .env.example .env
+    cp .example.env .env
+    ```
+    
+    ```python
+    cp misc/pre-commit .git/hooks/pre-commit
     ```
 
     Ensure you set the following environment variables in your `.env` file:
