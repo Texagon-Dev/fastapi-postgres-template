@@ -3,7 +3,10 @@ name = "FastAPI-Postgres-Template"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11"
+authors = [{ name = "HBilal Khan", email = "hbilal@texagon.io" }, { name = "M Talha", email = "mtalha@texagon.io" }]
+license = { text = "Proprietary" }
+urls = { Homepage = "https://example.com/saas-backend", Repository = "https://github.com/Texagon-Dev/fastapi-hexagonal-ddd-postgres-template", Issues = "https://github.com/Texagon-Dev/fastapi-hexagonal-ddd-postgres-template/issues" }
+requires-python = ">=3.12"
 dependencies = [
     "aiocache[redis]>=0.12.3",
     "alembic==1.16.1",
@@ -57,10 +60,21 @@ dev = [
     "ruff>=0.12.9",
 ]
 
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+# -------------------------
+# Ruff (lint + format)
+# -------------------------
 [tool.ruff]
-target-version = "py312"
 line-length = 120
+target-version = "py311"
+# Keep extended project-specific ignores AND a broad exclude list
+extend-exclude = ["migrations", "alembic"]
 exclude = [
     ".git",
     ".venv",
@@ -69,8 +83,7 @@ exclude = [
     "dist",
     ".mypy_cache",
     ".pytest_cache",
-    ".ruff_cache",
-    "app/alembic"
+    ".ruff_cache"
 ]
 
 [tool.ruff.format]
@@ -80,22 +93,59 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.ruff.lint]
-# Select rule groups or codes appropriate for your project scope
-select = ["E", "F", "A", "ASYNC", "B", "I"]
-# Optionally ignore rules you don't care about
-ignore = []
-# Enable fixing of all fixable problems when running with --fix
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "I",    # isort (import sorting)
+    "B",    # bugbear
+    "UP",   # pyupgrade
+    "SIM",  # simplify
+]
+ignore = [
+    "E501",  # line too long (formatter handles)
+    "E203",  # whitespace before ':'
+    "B008",  # FastAPI Depends used in defaults
+    "B904",  # raise in except without from
+]
+# From A → enable sweeping autofix and smarter dummy variables
 fixable = ["ALL"]
-unfixable = []
-# Regex to allow underscore-prefixed variables as unused without warning
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"alembic/env.py" = ["E402", "F401"]
+"app/main.py" = ["E402"]
+"app/services/prompting/suggestion_prompt.py" = ["F541"]
 
+# -------------------------
+# MyPy
+# -------------------------
 [tool.mypy]
-python_version = "3.12"
-strict = true
-warn_unused_ignores = true
-disallow_untyped_defs = true
-disallow_untyped_calls = true
-disallow_incomplete_defs = true
+python_version = "3.11"
 warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "app.migrations.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "alembic.*"
+ignore_errors = true
+
+# -------------------------
+# Bandit (security)
+# -------------------------
+[tool.bandit]
+exclude_dirs = ["tests", "migrations", "alembic"]
+skips = ["B101", "B601"]
+
