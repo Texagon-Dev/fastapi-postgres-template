@@ -31,6 +31,17 @@ This is a template project for a FastAPI application with a PostgreSQL database,
 
 ## Basic Configuration
 
+### Clone
+clone the repo
+```bash
+git clone https://github.com/Texagon-Dev/fastapi-postgres-template your-project-name
+```
+
+### Change Remote Repo to your's one
+```bash
+git remote set-url origin <your-project-repo-url>
+```
+
 ### Setup
 Setup Automatically
 ```python
