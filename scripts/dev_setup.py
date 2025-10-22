@@ -36,32 +36,49 @@ def setup_git_hooks() -> bool:
     """Set up git hooks."""
     hooks_dir = Path(".git/hooks")
     pre_commit_src = Path("misc/pre-commit")
+    pre_commit_dest = hooks_dir / "pre-commit"
     
     if not pre_commit_src.exists():
         print(f"❌ Pre-commit hook not found at {pre_commit_src}")
         return False
     
-    if not hooks_dir.exists():
+    # Ensure .git directory exists
+    if not Path(".git").exists():
         print("ℹ️ Initializing git repository...")
         if not run_command("git init"):
             return False
     
+    # Create hooks directory if it doesn't exist
+    hooks_dir.mkdir(exist_ok=True, parents=True)
+    
     print("🔧 Setting up git hooks...")
-    pre_commit_dest = hooks_dir / "pre-commit"
     
-    # Copy the pre-commit hook
-    shutil.copy(pre_commit_src, pre_commit_dest)
-    
-    # Make it executable (works on Unix-like systems)
+    # Read the custom hook content first to fail fast if there's an issue
     try:
-        pre_commit_dest.chmod(0o755)
+        with open(pre_commit_src, 'r') as f:
+            hook_content = f.read()
     except Exception as e:
-        print(f"⚠️  Could not set executable permissions: {e}")
-        print("⚠️  On Windows, you may need to run this as Administrator")
+        print(f"❌ Failed to read custom pre-commit hook: {e}")
+        return False
     
-    # Install pre-commit hooks
-    if not run_command("pre-commit install"):
-        print("⚠️  Failed to install pre-commit hooks")
+    # Write directly to the destination
+    try:
+        with open(pre_commit_dest, 'w') as f:
+            f.write(hook_content)
+        
+        # Make the hook executable
+        pre_commit_dest.chmod(0o755)
+        print(f"✅ Installed custom pre-commit hook to {pre_commit_dest}")
+        
+        # Verify the hook was written correctly
+        with open(pre_commit_dest, 'r') as f:
+            installed_content = f.read()
+            if installed_content != hook_content:
+                print("❌ Warning: The installed hook content doesn't match the source!")
+                return False
+            
+    except Exception as e:
+        print(f"❌ Failed to install custom pre-commit hook: {e}")
         return False
     
     print("✅ Git hooks set up successfully")
