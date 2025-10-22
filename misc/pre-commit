@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Get list of staged Python files
+files=$(git diff --cached --name-only --diff-filter=ACM | grep "\\.py$")
+
+echo "Modified Python files: $files"
+
+# If no Python files are modified, exit successfully
+if [ -z "$files" ]; then
+    echo "No Python files modified. Skipping pre-commit hooks."
+    exit 0
+fi
+
+# Run ruff on the modified files with --output-format=full to capture warnings
+echo "🔍 Running ruff checks..."
+# Capture both stdout and stderr to catch warnings
+ruff_output=$(uv run ruff check $files --output-format=full 2>&1)
+ruff_exit_code=$?
+
+# Check if there are any warnings or errors
+if [[ $ruff_output == *"warning:"* ]] || [ $ruff_exit_code -ne 0 ]; then
+    echo "❌ Ruff found issues that need to be fixed:"
+    echo "$ruff_output"
+    echo "\nPlease fix the above issues before committing."
+    exit 1
+fi
+
+# Capture the exit code of the pre-commit command
+pre_commit_exit_code=$?
+
+# If pre-commit found issues, exit with its exit code
+if [ $pre_commit_exit_code -ne 0 ]; then
+    echo "❌ Pre-commit hooks found issues that need to be fixed"
+    exit $pre_commit_exit_code
+fi
+
+echo "✅ All checks passed"
+exit 0
