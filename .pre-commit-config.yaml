@@ -11,6 +11,20 @@ repos:
         exclude: ^app/alembic/
       - id: check-added-large-files
         exclude: ^app/alembic/
+      - id: check-toml
+        exclude: ^app/alembic/
+      - id: check-yaml
+        exclude: ^app/alembic/
+        types_or: [yaml, yml]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.1
+    hooks:
+      - id: ruff
+        args: [--fix, --show-fixes]
+        exclude: ^app/alembic/
+      - id: ruff-format
+        exclude: ^app/alembic/
 
   - repo: https://github.com/myint/autoflake
     rev: v2.3.1
