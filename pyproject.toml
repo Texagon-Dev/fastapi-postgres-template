@@ -71,19 +71,27 @@ packages = ["app"]
 # Ruff (lint + format)
 # -------------------------
 [tool.ruff]
-line-length = 120
+line-length = 120  # Matches Black's default
 target-version = "py311"
-# Keep extended project-specific ignores AND a broad exclude list
-extend-exclude = ["migrations", "alembic"]
+# Exclude non-source directories and common build artifacts
 exclude = [
     ".git",
     ".venv",
     "__pycache__",
+    "**/__pycache__",
     "build",
     "dist",
     ".mypy_cache",
     ".pytest_cache",
-    ".ruff_cache"
+    ".ruff_cache",
+    "migrations",
+    "alembic",
+    "**/migrations",
+    "**/alembic",
+    "**/tests",
+    "**/test_*.py",
+    "**/*_test.py",
+    "**/conftest.py"
 ]
 
 [tool.ruff.format]
@@ -122,16 +130,19 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 # -------------------------
 [tool.mypy]
 python_version = "3.11"
+# Enable strict mode
+strict = true
+# Keep some additional strictness flags for clarity
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_decorators = true
 warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = false
-disallow_incomplete_defs = false
-check_untyped_defs = true
-no_implicit_optional = true
+warn_unreachable = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
-strict_equality = true
+no_implicit_optional = true
+check_untyped_defs = true
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
