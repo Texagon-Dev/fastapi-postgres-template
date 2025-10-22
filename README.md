@@ -17,131 +17,136 @@ This is a template project for a FastAPI application with a PostgreSQL database,
   - Password reset functionality
 - **Environment-based configuration**: Different settings for development, staging, and production
 
-## Prerequisites
+## Getting Started
 
-- **Local Development**:
-  - Python 3.11 or higher
-  - PostgreSQL installed locally or accessible
-  - pip or another Python package manager
+### Prerequisites
 
-- **Docker Deployment**:
-  - Docker and Docker Compose installed
-  - A code editor (e.g., VS Code)
-  - A terminal or command prompt
+- **Python 3.11+** and pip/uv
+- **PostgreSQL** (local or remote)
+- **Git** for version control
+- **Docker & Docker Compose** (for containerized development)
+- **Terminal/Command Prompt** (PowerShell recommended for Windows)
 
-## Basic Configuration
+### Quick Start
 
-### Clone
-clone the repo
-```bash
-git clone https://github.com/Texagon-Dev/fastapi-postgres-template your-project-name
-```
-
-### Change Remote Repo to your's one
-```bash
-git remote set-url origin <your-project-repo-url>
-```
-
-### Setup
-Setup Automatically
-```python
-./setup.py
-```
-OR Manually
-
-1.  **Environment Variables**:
-    This project uses a `.env` file for local development configuration. If it doesn't exist, run this command to create:
-
-    ```python
-    cp .example.env .env
-    ```
-    
-    ```python
-    cp misc/pre-commit .git/hooks/pre-commit
-    ```
-
-    Ensure you set the following environment variables in your `.env` file:
-
-```python
-# Core settings
-FRONTEND_URL='http://localhost:3000'
-SECRET_KEY='your_32_char_strong_secret_key_here'
-DEBUG=True
-ENVIRONMENT='development'  # Options: development, staging, production
-
-# Database settings
-POSTGRES_USER="your_username"
-POSTGRES_PASSWORD="your_password"
-POSTGRES_DB_NAME="fastapi_db"
-
-# Authentication
-ALGORITHM='HS256'
-ACCESS_TOKEN_EXPIRE_MINUTES=30  # Short-lived access tokens for security
-REFRESH_TOKEN_EXPIRE_DAYS=7     # Longer-lived refresh tokens
-```
-
-## Local Installation and Setup
-
-#### (Recommended uv)
-
-1. **Install dependencies directly with uv**:
-
+**Clone the repository**:
    ```bash
-   # uv will make .venv automatically
+   git clone https://github.com/Texagon-Dev/fastapi-postgres-template your-project-name
+   cd your-project-name
+   git remote set-url origin <your-project-repo-url>
+   ```
+
+### Development Setup
+
+### Option 1: Automated Setup (Recommended)
+We provide a setup script to help you get started quickly. Choose the appropriate command for your operating system:
+
+#### Mac/Linux:
+```bash
+# Make the script executable
+chmod +x scripts/dev_setup.py
+
+# Run the setup script
+./scripts/dev_setup.py
+```
+
+#### Windows (Command Prompt):
+```cmd
+# Run the setup script directly with Python
+python scripts/dev_setup.py
+```
+
+#### Windows (PowerShell):
+```powershell
+# Run the setup script directly with Python
+python .\scripts\dev_setup.py
+```
+
+### Option 2: Manual Setup
+**The setup script will**:
+- Create a `.env` file from the example
+- Set up git hooks
+- Install pre-commit hooks
+
+    2. **Set up environment**:
+   - Copy the example environment file:
+     ```bash
+     # Linux/macOS
+     cp .example.env .env
+     
+     # Windows (Command Prompt)
+     copy .example.env .env
+     
+     # Windows (PowerShell)
+     Copy-Item -Path .example.env -Destination .env
+     ```
+   - Update the `.env` file with your configuration (see Configuration section below)
+
+    ### Configuration
+
+    - Edit the `.env` file with your settings:
+
+    ```env
+    # Core settings
+    FRONTEND_URL='http://localhost:3000'
+    SECRET_KEY='your_32_char_strong_secret_key_here'
+    DEBUG=True
+    ENVIRONMENT='development'  # Options: development, staging, production
+
+    # Database settings
+    POSTGRES_USER="your_username"
+    POSTGRES_PASSWORD="your_password"
+    POSTGRES_DB_NAME="fastapi_db"
+
+    # Authentication
+    ALGORITHM='HS256'
+    ACCESS_TOKEN_EXPIRE_MINUTES=30  # Short-lived access tokens for security
+    REFRESH_TOKEN_EXPIRE_DAYS=7     # Longer-lived refresh tokens
+    ```
+
+    3. **Install dependencies** (using uv - recommended):
+   ```bash
+   # Install dependencies and create virtual environment
    uv sync
+   
+   # Activate virtual environment
+   # Linux/macOS:
+   source .venv/bin/activate
+   # Windows (Command Prompt):
+   .venv\Scripts\activate
+   # Windows (PowerShell):
+   .\.venv\Scripts\Activate.ps1
    ```
-2. **Install new dependencies with uv**:
 
+    4. **Set up the database**:
    ```bash
-   uv add dependency_name
-   ```
-3. **Run server**:
-
-   ```bash
-   uv run uvicorn app.main:app --reload
-   ```
-   OR if you have make available
-   ```
-   make start
-   ```
-
-#### (Not recommended)
-
-1. **Create a virtual environment**:
-
-   ```bash
-   # Using standard venv
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-   # OR using uv (faster)
-   uv venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
-
-2. **Install dependencies**:
-
-   ```bash
-   # Using pip
-   pip install -r requirements.txt
-
-   # OR using uv (faster)
-   uv pip install -r requirements.txt
-   ```
-
-
-#### Set up the database:
-
-   Create your PostgreSQL database and run migrations:
-
-   ```bash
-   # Make sure you've set the correct DATABASE_URL in your .env file
-   alembic upgrade head
-   ```
-   OR if you have make available
-   ```
+   # Run migrations
+   uv run alembic upgrade head
+   
+   # Or using make (if available)
    make alembic-upgrade
    ```
+
+   5. **Set up pre-commit hooks**:
+   ```bash
+   # Linux/macOS/Windows (Git Bash)
+   cp misc/pre-commit .git/hooks/pre-commit
+   chmod +x .git/hooks/pre-commit
+   
+   # Windows (Command Prompt)
+   copy /Y misc\pre-commit .git\hooks\pre-commit
+   ```
+
+    6. **Start the development server**:
+    ```bash
+    # Using uvicorn directly
+    uv run uvicorn app.main:app --reload
+    
+    # Or using make (if available)
+    make start
+    ```
+    The API will be available at `http://localhost:8000` and interactive docs at `http://localhost:8000/docs`
+
 
 ### Database Migrations Guide
 
