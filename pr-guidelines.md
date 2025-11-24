@@ -19,7 +19,7 @@ Before pushing your changes and creating a PR, you must complete the following s
 To keep the review process simple and fast, PRs must be focused and manageable:
 
 * **Focused Scope:** Each pull request must address a **single issue or feature**. Avoid mixing unrelated changes (e.g., a feature update and a dependency upgrade) in the same PR.
-* **Size Limit:** PRs should ideally not exceed **500 lines** of modified code (additions + deletions). If your change is larger, work with your Team Lead to break it down into smaller, sequential PRs.
+* **Size Limit:** PRs should ideally not exceed **1000 lines** of modified code (additions + deletions). If your change is larger, work with your Team Lead to break it down into smaller, sequential PRs.
 
 ---
 
@@ -29,8 +29,8 @@ The clarity of your PR title and description directly impacts the speed and qual
 
 ### Title and Commit Messages
 
-* **Clear Commit Messages:** Write clear and descriptive commit messages that explain the purpose of each change. Use **conventional commit prefixes** (e.g., `feat:`, `fix:`, `refactor:`) where appropriate.
-* **Proper Title:** The PR title should be concise, reflecting the main purpose of the change (e.g., **FEAT: Implement user profile editing page**).
+* **Clear Commit Messages:** Write clear and descriptive commit messages that explain the purpose of each change. Use **conventional commit prefixes** (e.g., `feat:`, `chore:`, `fix:`, `refactor:`) where appropriate.
+* **Proper Title:** The PR title should be concise, reflecting the main purpose of the change (e.g., `feat: Add user profile page`).
 
 ### Description (The Core)
 
@@ -76,8 +76,8 @@ The PR description must be **detailed** and cover the following sections:
 
 ### Addressing Feedback (Mandatory)
 
-* **Fix All Issues:** You must address and fix **all** reviewer suggestions and static analysis issues (including those from tools like Gemini), even if they are categorized as **Medium severity**.
-* **Justification:** If you decide not to fix a specific issue or suggestion, you must leave a clear comment on the issue itself with a brief, professional **justification** for why the change is not being implemented.
+* **Address All Feedback:** You must address **all** reviewer suggestions and static analysis issues (including those from tools like Gemini), even if they are categorized as **Medium severity**. For each piece of feedback, you should either **apply the change or provide a clear justification for not doing so.**
+* **Justification for Disagreement:** If you decide not to fix a specific issue or suggestion, you must leave a clear comment on the issue itself with a brief, professional **justification** for why the change is not being implemented. The PR cannot be merged until all comments are resolved by either implementing the feedback or getting the reviewer's agreement on the justification.
 
 ### Patience and Professionalism
 
