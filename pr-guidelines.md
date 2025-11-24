@@ -19,7 +19,7 @@ Before pushing your changes and creating a PR, you must complete the following s
 To keep the review process simple and fast, PRs must be focused and manageable:
 
 * **Focused Scope:** Each pull request must address a **single issue or feature**. Avoid mixing unrelated changes (e.g., a feature update and a dependency upgrade) in the same PR.
-* **Size Limit:** PRs should ideally not exceed **1000 lines** of modified code (additions + deletions). If your change is larger, work with your Team Lead to break it down into smaller, sequential PRs.
+* **Size Limit:** PRs should ideally not exceed **500 lines** of modified code (additions + deletions). If your change is larger, work with your Team Lead to break it down into smaller, sequential PRs.
 
 ---
 
